@@ -1,0 +1,67 @@
+Exam:(done)
+  1. exam id (primary)
+  2. exam name (primary)
+  3. time
+  4. question (table)
+  5. Location
+  6. duration
+  
+Questions:(done)
+  1. Questin id (primary)
+  2. number of Question 
+  3. options (min 2, max 6)
+  4. exam_id (fk)
+
+Options:(done)
+  1. option Id
+  2. option name 
+  7. question id (foreign key)
+
+Candidates:(done)
+  1. serial number (primary)
+  2. name
+  3. school name
+  4. level
+  5. exam id (foreign)
+  6. result id (foreign)
+
+Results:(done)
+  1. Result id (primary)
+  2. Exam id (foreign key)
+  3. candidate id (foreign key)
+  4. total mark
+  5. grade
+
+
+
+
+-- for primary keys change 
+-- ALTER TABLE exams ADD CONSTRAINT pk_exam PRIMARY KEY (exam_id);
+
+
+-- adding primary keys
+-- Step 1: Drop the existing primary key
+--ALTER TABLE exams
+--DROP PRIMARY KEY;
+-- Step 2: Add a composite primary key (exam_id, exam_name)
+--ALTER TABLE exams
+--ADD CONSTRAINT pk_exam PRIMARY KEY (exam_id, exam_name);
+--ALTER TABLE exams ADD PRIMARY KEY(exam_id,exam_name);
+
+--all constrains ..
+-- SELECT 
+--    CONSTRAINT_NAME,
+--    CONSTRAINT_TYPE,
+--    TABLE_NAME
+--FROM 
+--    INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+--WHERE 
+--TABLE_NAME = 'exams';  -- Replace 'exams' with your table name
+
+
+
+
+--To drop a DEFAULT constraint, use the following SQL:
+
+--ALTER TABLE table_name
+-- ALTER colum_name DROP DEFAULT;
