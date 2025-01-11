@@ -56,38 +56,43 @@ const addExam = async (req,res)=>{
     }
 }
 
-const updateExam = async (req,res)=>{
-    try{
-        const{
-                exam_id,
-                exam_name,
-                exam_date,
-                exam_location,
-                exam_duration,
-                question_count,
-                candidate_count
-             } = req.body;
-        console.log({exam_id,exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count});
-        
-        const [exam] = await db.query(examsQ.getSpecificById,[exam_id]);
-        if(exam.length != 1){
-            console.log("Exam Id: ",id);
+const updateExam = async (req, res) => {
+    try {
+        const {
+            exam_id,
+            exam_name,
+            exam_date,
+            exam_location,
+            exam_duration,
+            question_count,
+            candidate_count
+        } = req.body;
+
+        console.log({ exam_id, exam_name, exam_date, exam_location, exam_duration, question_count, candidate_count });
+
+        // Convert exam_date to MySQL-compatible DATETIME format
+        const formattedDate = new Date(exam_date).toISOString().slice(0, 19).replace('T', ' ');
+
+        const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
+        if (exam.length !== 1) {
+            console.log("Exam Id: ", exam_id);
             console.log("No exam found with this id");
-            res.status(404).json({"message":"Exam not found"});
+            res.status(404).json({ "message": "Exam not found" });
             return;
         }
 
         const result = await db.execute(
             examsQ.editExam,
-            [exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count,exam_id]
+            [exam_name, formattedDate, exam_location, exam_duration, question_count, candidate_count, exam_id]
         );
         console.log(result);
-        res.status(204).json({"message":"Exam data Updated"});
-    }catch(err){
-        console.log(err);
-        res.status(500).json({"message":"Internal Server Error"});
+        res.status(204).json({ "message": "Exam data Updated" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ "message": "Internal Server Error" });
     }
-}
+};
+
 
 const deleteExam = async (req,res)=>{
     try{
