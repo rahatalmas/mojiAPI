@@ -23,58 +23,59 @@ const getExamWithDetails = async (req, res) => {
     try {
         const examId = req.params.examId;
         const [examDetails] = await db.query(examsQ.getExamDetailsById, [examId]);
-        //create a function here to get stu
-        console.log(examDetails);
-        // Initialize the result object
-        const result = {
-            exam_id: examDetails[0].exam_id,
-            exam_name: examDetails[0].exam_name,
-            exam_date: examDetails[0].exam_date,
-            exam_location: examDetails[0].exam_location,
-            exam_duration: examDetails[0].exam_duration,
-            question_count: examDetails[0].question_count,
-            candidate_count: examDetails[0].candidate_count,
-            candidates: [],
-            question_answers: []
-        };
-        // For candidates, we’ll track unique ones by their `scholar_id`
-        const uniqueCandidates = new Set();
+        // //create a function here to get stu
+        // console.log(examDetails);
+        // // Initialize the result object
+        // const result = {
+        //     exam_id: examDetails[0].exam_id,
+        //     exam_name: examDetails[0].exam_name,
+        //     exam_date: examDetails[0].exam_date,
+        //     exam_location: examDetails[0].exam_location,
+        //     exam_duration: examDetails[0].exam_duration,
+        //     question_count: examDetails[0].question_count,
+        //     candidate_count: examDetails[0].candidate_count,
+        //     candidates: [],
+        //     question_answers: []
+        // };
+        // // For candidates, we’ll track unique ones by their `scholar_id`
+        // const uniqueCandidates = new Set();
 
-        // For correct answers (question_answers), we’ll track unique answers for each question
-        const correctAnswers = new Set();
+        // // For correct answers (question_answers), we’ll track unique answers for each question
+        // const correctAnswers = new Set();
 
-        examDetails.forEach(item => {
-            // For candidate data
-            const candidate = {
-                serial_number: item.scholar_id,
-                candidate_name: item.candidate_name,
-                candidate_school: item.candidate_school,
-                candidate_class_level: item.candidate_class_level,
-                candidate_picture: item.candidate_picture,
-                grade: item.grade
-            };
+        // examDetails.forEach(item => {
+        //     // For candidate data
+        //     const candidate = {
+        //         serial_number: item.scholar_id,
+        //         candidate_name: item.candidate_name,
+        //         candidate_school: item.candidate_school,
+        //         candidate_class_level: item.candidate_class_level,
+        //         candidate_picture: item.candidate_picture,
+        //         grade: item.grade
+        //     };
 
-            // Only add unique candidates by scholar_id
-            if (!uniqueCandidates.has(item.scholar_id)) {
-                result.candidates.push(candidate);
-                uniqueCandidates.add(item.scholar_id);
-            }
+        //     // Only add unique candidates by scholar_id
+        //     if (!uniqueCandidates.has(item.scholar_id)) {
+        //         result.candidates.push(candidate);
+        //         uniqueCandidates.add(item.scholar_id);
+        //     }
 
-            // Handle correct answers for each question
+        //     // Handle correct answers for each question
 
-            const correctAnswer = {
-                question_number: item.question_number,
-                correct_answer: item.correct_answer
-            };
+        //     const correctAnswer = {
+        //         question_number: item.question_number,
+        //         correct_answer: item.correct_answer
+        //     };
 
-            // Add the correct answer to the question_answers array without duplication
-            if (!correctAnswers.has(item.question_number)) {
-                result.question_answers.push(correctAnswer);
-                correctAnswers.add(item.question_number);
-            }
-        })
-        console.log(result);
-        res.status(200).json(result);
+        //     // Add the correct answer to the question_answers array without duplication
+        //     if (!correctAnswers.has(item.question_number)) {
+        //         result.question_answers.push(correctAnswer);
+        //         correctAnswers.add(item.question_number);
+        //     }
+        // })
+        // console.log(result);
+        // res.status(200).json(result);
+        res.status(200).json(examDetails);
     } catch (err) {
         console.log(err);
         res.status(500).json({ "message": "Internal Server Error" });
