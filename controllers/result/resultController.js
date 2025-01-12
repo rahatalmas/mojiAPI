@@ -54,35 +54,35 @@ const myResult = async (req,res)=>{
 const addResult = async (req,res)=> {
 
     console.log("Adding Result: ");
-    const {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
-    // console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
+    let {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
+    console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     
-    // const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
-    // //console.log(exam);
-    // if (exam.length !== 1) {
-    //     console.log("Exam Id: ", exam_id);
-    //     console.log("No exam found with this id");
-    //     res.status(404).json({ "message": "Exam not found" });
-    //     return;
-    // }
+    const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
+    //console.log(exam);
+    if (exam.length !== 1) {
+        console.log("Exam Id: ", exam_id);
+        console.log("No exam found with this id");
+        res.status(404).json({ "message": "Exam not found" });
+        return;
+    }
     
-    // let totalQuestion = exam[0].question_count;
-    // let passedQuestions = correct_answers+incorrect_answers;
+    let totalQuestion = exam[0].question_count;
+    let passedQuestions = correct_answers+incorrect_answers;
 
-    // if(passedQuestions>totalQuestion){
-    //     console.log("invalid query")
-    //     res.status(500).json({ "message": "Invalid Query" });
-    //     return;
-    // }
-    // if(passedQuestions < totalQuestion){
-    //     incorrect_answers = (totalQuestion-correct_answers);
-    // }
+    if(passedQuestions>totalQuestion){
+        console.log("invalid query")
+        res.status(500).json({ "message": "Invalid Query" });
+        return;
+    }
+    if(passedQuestions < totalQuestion){
+        incorrect_answers = (totalQuestion-correct_answers);
+    }
 
-    // if((correct_answers / totalQuestion) > 0.4){
-    //     grade = "Pass"
-    // }else{
-    //     grade = "Fail"
-    // }
+    if((correct_answers / totalQuestion) > 0.4){
+        grade = "Pass"
+    }else{
+        grade = "Fail"
+    }
     try{
         //const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         res.status(201).json({"message":"New Result Added"});  
