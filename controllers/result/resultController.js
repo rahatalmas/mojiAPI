@@ -25,7 +25,7 @@ const getAllResult = async (req,res)=> {
 const getAllResultWithExamAndCandidate = async (req,res)=> {
     try{
         const [result] = await db.query(resultQ.getAllResultWithExamAndCandidate);
-        console.log([result]);
+        //console.log([result]);
         res.status(200).json(result);          
     }catch(err){
         console.log(err);
