@@ -57,11 +57,6 @@ const addResult = async (req,res)=> {
     const {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
     console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     
-    if(!exam_id){
-        res.status(404).json({"message":"No Exam found"});    
-        console.log("no exam id");
-        return;
-    }
     const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
     
     if (exam.length !== 1) {
@@ -73,11 +68,14 @@ const addResult = async (req,res)=> {
     
     const totalQuestion = exam[0].question_count;
     const passedQuestions = correct_answers+incorrect_answers;
+
     if(passedQuestions>totalQuestion){
         res.status(500).json({ "message": "Invalid Query" });
         return;
     }
-    
+    if(passedQuestions < totalQuestion){
+        incorrect_answers = (totalQuestion-correct_answers);
+    }
     try{
         const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         console.log([result]);
@@ -112,6 +110,9 @@ const updateExamResults = async (req,res)=>{
     if(passedQuestions>totalQuestion){
         res.status(500).json({ "message": "Invalid Query" });
         return;
+    }
+    if(passedQuestions < totalQuestion){
+        incorrect_answers = (totalQuestion-correct_answers);
     }
     //console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     try{
