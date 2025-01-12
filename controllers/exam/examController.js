@@ -4,13 +4,13 @@ const { roles } = require("../utility/keys");
 
 const getExamList = async (req, res) => {
     try {
-        const rolekey = req.user.key;
-        const role = roles[rolekey];
-        console.log(role);
-        if(role != "admin" && role != "editor"){
-            res.status(401).json({"message":"Access Denied"});
-            return;
-        }
+        // const rolekey = req.user.key;
+        // const role = roles[rolekey];
+        // console.log(role);
+        // if(role != "admin" && role != "editor"){
+        //     res.status(401).json({"message":"Access Denied"});
+        //     return;
+        // }
         const [exams] = await db.query(examsQ.getList);
         exams.reverse();
         res.status(200).json(exams);
