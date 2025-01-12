@@ -53,8 +53,8 @@ const myResult = async (req,res)=>{
 //add result
 const addResult = async (req,res)=> {
 
-    // console.log("Adding Result: ");
-    // let {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
+    console.log("Adding Result: ");
+    let {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
     // console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     
     // const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
