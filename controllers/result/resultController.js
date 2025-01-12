@@ -84,7 +84,7 @@ const addResult = async (req,res)=> {
         grade = "Fail"
     }
     try{
-        //const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
+        const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         res.status(201).json({"message":"New Result Added"});  
             
     }catch(err){
