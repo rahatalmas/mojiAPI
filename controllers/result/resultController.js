@@ -58,7 +58,7 @@ const addResult = async (req,res)=> {
     console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     
     const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
-    console.log(exam);
+    //console.log(exam);
     if (exam.length !== 1) {
         console.log("Exam Id: ", exam_id);
         console.log("No exam found with this id");
@@ -66,10 +66,11 @@ const addResult = async (req,res)=> {
         return;
     }
     
-    const totalQuestion = exam[0].question_count;
-    const passedQuestions = correct_answers+incorrect_answers;
+    let totalQuestion = exam[0].question_count;
+    let passedQuestions = correct_answers+incorrect_answers;
 
     if(passedQuestions>totalQuestion){
+        console.log("invalid query")
         res.status(500).json({ "message": "Invalid Query" });
         return;
     }
@@ -84,11 +85,10 @@ const addResult = async (req,res)=> {
     }
     try{
         const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
-        //console.log([result]);
         res.status(201).json({"message":"New Result Added"});  
             
     }catch(err){
-        console.log(err);
+        //console.log(err);
         res.status(500).json({"message":"Internal Server Error"}); 
       
     }
