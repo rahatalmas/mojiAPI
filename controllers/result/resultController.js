@@ -1,5 +1,10 @@
 const db = require("../../config/db");
-const { resultQ } = require("../../queries/queries");
+const { resultQ, examsQ } = require("../../queries/queries");
+
+
+const verifY = async(exam_id) =>{
+
+}
 
 //All result for a exam
 const getAllResult = async (req,res)=> {
@@ -47,9 +52,26 @@ const myResult = async (req,res)=>{
 
 //add result
 const addResult = async (req,res)=> {
+
     console.log("Adding Result: ");
     const {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
     console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
+    
+    const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
+    
+    if (exam.length !== 1) {
+        console.log("Exam Id: ", exam_id);
+        console.log("No exam found with this id");
+        res.status(404).json({ "message": "Exam not found" });
+        return;
+    }
+    
+    const totalQuestion = exam[0].question_count;
+    const passedQuestions = correct_answers+incorrect_answers;
+    if(passedQuestions>totalQuestion){
+        res.status(500).json({ "message": "Invalid Query" });
+        return;
+    }
     try{
         const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         console.log([result]);
@@ -68,6 +90,21 @@ const updateExamResults = async (req,res)=>{
     if(!exam_id){
         res.status(404).json({"message":"No Exam found"});    
         console.log("no exam id");
+        return;
+    }
+    const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
+    
+    if (exam.length !== 1) {
+        console.log("Exam Id: ", exam_id);
+        console.log("No exam found with this id");
+        res.status(404).json({ "message": "Exam not found" });
+        return;
+    }
+    
+    const totalQuestion = exam[0].question_count;
+    const passedQuestions = correct_answers+incorrect_answers;
+    if(passedQuestions>totalQuestion){
+        res.status(500).json({ "message": "Invalid Query" });
         return;
     }
     //console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
