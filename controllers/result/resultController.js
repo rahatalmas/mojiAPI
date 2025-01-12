@@ -54,7 +54,7 @@ const myResult = async (req,res)=>{
 const addResult = async (req,res)=> {
 
     console.log("Adding Result: ");
-    const {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
+    let {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
     console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     
     const [exam] = await db.query(examsQ.getSpecificById, [exam_id]);
@@ -90,7 +90,7 @@ const addResult = async (req,res)=> {
 const updateExamResults = async (req,res)=>{
     const examId = req.params.examId;
     console.log("Updating Result...",examId);         
-    const {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
+    let {exam_id,serial_number,correct_answers,incorrect_answers,grade} = req.body;
     if(!exam_id){
         res.status(404).json({"message":"No Exam found"});    
         console.log("no exam id");
