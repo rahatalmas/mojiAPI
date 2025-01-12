@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS candidates (
     scholar_id INT NOT NULL,
     exam_id INT NOT NULL,
     PRIMARY KEY(serial_number,exam_id),
-    CONSTRAINT fk_exam_candidates FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+    CONSTRAINT fk_exam_candidates FOREIGN KEY (exam_id) REFERENCES exams(exam_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS scholars(
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS question_answers (
     question_number INT NOT NULL,
     correct_answer INT NOT NULL,
     PRIMARY KEY (exam_id, question_set_id,question_number),
-    CONSTRAINT fk_exam_answer_set FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+    CONSTRAINT fk_exam_answer_set FOREIGN KEY (exam_id) REFERENCES exams(exam_id) ON DELETE CASCADE
 );
 
 
@@ -56,23 +56,7 @@ CREATE TABLE IF NOT EXISTS results (
     incorrect_answers INT NOT NULL CHECK (incorrect_answers >= 0),
     grade VARCHAR(20) NOT NULL,
     PRIMARY KEY (exam_id,serial_number),
-    CONSTRAINT fk_candidate FOREIGN KEY (serial_number) REFERENCES candidates(serial_number),
-    CONSTRAINT fk_exam_result FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+    CONSTRAINT fk_candidate FOREIGN KEY (serial_number) REFERENCES candidates(serial_number) ON DELETE CASCADE,
+    CONSTRAINT fk_exam_result FOREIGN KEY (exam_id) REFERENCES exams(exam_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS questions (
-    question_id INT NOT NULL AUTO_INCREMENT,
-    question_text VARCHAR(255) NOT NULL,
-    options_per_question INT NOT NULL,
-    exam_id INT NOT NULL,
-    PRIMARY KEY(question_id),
-    CONSTRAINT fk_exam_questions FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
-);
-
-CREATE TABLE IF NOT EXISTS options (
-    option_id INT NOT NULL AUTO_INCREMENT,
-    option_text VARCHAR(255) NOT NULL,
-    question_id INT NOT NULL,
-    PRIMARY KEY(option_id),
-    CONSTRAINT fk_question FOREIGN KEY (question_id) REFERENCES questions(question_id)
-);
