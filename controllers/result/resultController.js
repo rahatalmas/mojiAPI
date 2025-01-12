@@ -85,10 +85,12 @@ const addResult = async (req,res)=> {
     try{
         const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         //console.log([result]);
-        res.status(201).json({"message":"New Result Added"});          
+        res.status(201).json({"message":"New Result Added"});  
+        return;        
     }catch(err){
         console.log(err);
-        res.status(500).json({"message":"Internal Server Error"});    
+        res.status(500).json({"message":"Internal Server Error"}); 
+        return;   
     }
 }
 
