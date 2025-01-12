@@ -76,6 +76,12 @@ const addResult = async (req,res)=> {
     if(passedQuestions < totalQuestion){
         incorrect_answers = (totalQuestion-correct_answers);
     }
+
+    if((correct_answers / totalQuestion) > 0.4){
+        grade = "Pass"
+    }else{
+        grade = "Fail"
+    }
     try{
         const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         console.log([result]);
@@ -113,6 +119,11 @@ const updateExamResults = async (req,res)=>{
     }
     if(passedQuestions < totalQuestion){
         incorrect_answers = (totalQuestion-correct_answers);
+    }
+    if((correct_answers / totalQuestion) > 0.4){
+        grade = "Pass"
+    }else{
+        grade = "Fail"
     }
     //console.log("Result: ",exam_id,serial_number,correct_answers,incorrect_answers,grade);
     try{
