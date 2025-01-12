@@ -68,6 +68,9 @@ const addResult = async (req,res)=> {
     
     const totalQuestion = exam[0].question_count;
     const passedQuestions = correct_answers+incorrect_answers;
+    if(passedQuestions > totalQuestion){
+        incorrect_answers = (totalQuestion-correct_answers);
+    }
     if(passedQuestions>totalQuestion){
         res.status(500).json({ "message": "Invalid Query" });
         return;
