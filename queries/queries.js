@@ -16,6 +16,38 @@ const adminsQ = {
 const examsQ = {
     getList: "SELECT * FROM exams",
     getSpecificById:"SELECT * FROM exams WHERE exam_id=?",
+    getExamDetailsById: 
+    `
+            SELECT 
+            e.exam_id,
+            e.exam_name,
+            e.exam_date,
+            e.exam_location,
+            e.exam_duration,
+            e.question_count,
+            e.candidate_count,
+            
+            c.serial_number,
+            c.candidate_name,
+            c.school_name AS candidate_school,
+            c.class_level AS candidate_class_level,
+            c.candidate_picture,
+            c.scholar_id,
+            
+            qa.question_number,
+            qa.correct_answer,
+            
+            r.correct_answers,
+            r.incorrect_answers,
+            r.grade
+        FROM exams e
+        LEFT JOIN candidates c ON e.exam_id = c.exam_id
+        LEFT JOIN scholars s ON c.scholar_id = s.scholar_id
+        LEFT JOIN question_answers qa ON e.exam_id = qa.exam_id
+        LEFT JOIN results r ON e.exam_id = r.exam_id AND c.serial_number = r.serial_number
+        WHERE e.exam_id=?;
+
+    `,
     addExam: `INSERT INTO exams
                   (exam_name, exam_date, exam_location, exam_duration, question_count, candidate_count)
               VALUES 
