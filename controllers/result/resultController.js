@@ -1,5 +1,5 @@
 const db = require("../../config/db");
-const { resultQ, examsQ } = require("../../queries/queries");
+const { resultQ, examsQ, candidateQ } = require("../../queries/queries");
 
 
 const verifY = async(exam_id) =>{
@@ -83,6 +83,16 @@ const addResult = async (req,res)=> {
     }else{
         grade = "Fail"
     }
+    let [candidate] = await db.query(candidateQ.getCandidateBySerialNumber,[serial_number,exam_id]);
+    
+    if (candidate.length !== 1) {
+        
+        console.log("No cadidate found with this serial number");
+        res.status(404).json({ "message": "candidate not found" });
+        return;
+    }
+
+
     try{
         const [result] = await db.execute(resultQ.addResult,[exam_id,serial_number,correct_answers,incorrect_answers,grade]);
         res.status(201).json({"message":"New Result Added"});  
